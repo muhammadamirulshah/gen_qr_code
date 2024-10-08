@@ -4,6 +4,51 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Generate QR Code with User Data</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+       let qr;
+       function generateQRCode() {
+           const name = document.getElementById('name').value;
+           const ic = document.getElementById('ic').value;
+           const company = document.getElementById('company').value;
+           const expiry = document.getElementById('expiry').value;
+           const carid = document.getElementById('carid').value;
+           if (!name || !ic || !company || !expiry || !carid) {
+               alert("Please fill in all fields.");
+               return;
+           }
+           // Base URL for the GitHub Pages website
+           const baseUrl = "https://muhammadamirulshah.github.io/qr_code_display/";
+           // Create the URL with query parameters
+           const encodedName = encodeURIComponent(name);
+           const encodedIC = encodeURIComponent(ic);
+           const encodedCompany = encodeURIComponent(company);
+           const encodedExpiry = encodeURIComponent(expiry);
+           const encodedCarId = encodeURIComponent(carid);
+           const fullUrl = `${baseUrl}?name=${encodedName}&ic=${encodedIC}&company=${encodedCompany}&expiry=${encodedExpiry}&carid=${encodedCarId}`;
+           // Clear any previous QR code
+           document.getElementById('qrCode').innerHTML = '';
+           // Generate new QR code
+           qr = new QRCode(document.getElementById("qrCode"), {
+               text: fullUrl,
+               width: 256,
+               height: 256,
+           });
+           // Enable the save button
+           document.getElementById('saveBtn').disabled = false;
+       }
+       function saveQRCode() {
+           if (!qr) return;
+           const canvas = document.querySelector('#qrCode canvas');
+           const image = canvas.toDataURL("image/png");
+           // Create a temporary link element to trigger download
+           const link = document.createElement('a');
+           link.href = image;
+           link.download = 'user_qr_code.png';
+           // Programmatically trigger the download
+           link.click();
+       }
+</script>       
 <style>
        body {
            font-family: Arial, sans-serif;
@@ -77,50 +122,6 @@
 <button id="generateBtn" onclick="generateQRCode()">Generate QR Code</button>
 <button id="saveBtn" onclick="saveQRCode()" disabled>Save QR Code</button>
 <div id="qrCode"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script>
-       let qr;
-       function generateQRCode() {
-           const name = document.getElementById('name').value;
-           const ic = document.getElementById('ic').value;
-           const company = document.getElementById('company').value;
-           const expiry = document.getElementById('expiry').value;
-           const carid = document.getElementById('carid').value;
-           if (!name || !ic || !company || !expiry || !carid) {
-               alert("Please fill in all fields.");
-               return;
-           }
-           // Base URL for the GitHub Pages website
-           const baseUrl = "https://muhammadamirulshah.github.io/qr_code_display/";
-           // Create the URL with query parameters
-           const encodedName = encodeURIComponent(name);
-           const encodedIC = encodeURIComponent(ic);
-           const encodedCompany = encodeURIComponent(company);
-           const encodedExpiry = encodeURIComponent(expiry);
-           const encodedCarId = encodeURIComponent(carid);
-           const fullUrl = `${baseUrl}?name=${encodedName}&ic=${encodedIC}&company=${encodedCompany}&expiry=${encodedExpiry}&carid=${encodedCarId}`;
-           // Clear any previous QR code
-           document.getElementById('qrCode').innerHTML = '';
-           // Generate new QR code
-           qr = new QRCode(document.getElementById("qrCode"), {
-               text: fullUrl,
-               width: 256,
-               height: 256,
-           });
-           // Enable the save button
-           document.getElementById('saveBtn').disabled = false;
-       }
-       function saveQRCode() {
-           if (!qr) return;
-           const canvas = document.querySelector('#qrCode canvas');
-           const image = canvas.toDataURL("image/png");
-           // Create a temporary link element to trigger download
-           const link = document.createElement('a');
-           link.href = image;
-           link.download = 'user_qr_code.png';
-           // Programmatically trigger the download
-           link.click();
-       }
-</script>
+
 </body>
 </html>
