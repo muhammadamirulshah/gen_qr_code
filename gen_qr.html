@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Generate QR Code</title>
+<title>Generate QR Code with User Data</title>
 <style>
        body {
            font-family: Arial, sans-serif;
@@ -53,7 +53,7 @@
 </style>
 </head>
 <body>
-<h1>QR Code Generator</h1>
+<h1>QR Code Generator with User Data</h1>
 <div class="form-group">
 <label for="name">Name:</label>
 <input type="text" id="name" placeholder="Enter Name">
@@ -90,13 +90,20 @@
                alert("Please fill in all fields.");
                return;
            }
-           // Data to be encoded in the QR code
-           const qrData = `Name: ${name}\nIC: ${ic}\nCompany: ${company}\nExpiry Date: ${expiry}\nCar ID: ${carid}`;
+           // Base URL for the GitHub Pages website
+           const baseUrl = "https://muhammadamirulshah.github.io/qr_code_display/";
+           // Create the URL with query parameters
+           const encodedName = encodeURIComponent(name);
+           const encodedIC = encodeURIComponent(ic);
+           const encodedCompany = encodeURIComponent(company);
+           const encodedExpiry = encodeURIComponent(expiry);
+           const encodedCarId = encodeURIComponent(carid);
+           const fullUrl = `${baseUrl}?name=${encodedName}&ic=${encodedIC}&company=${encodedCompany}&expiry=${encodedExpiry}&carid=${encodedCarId}`;
            // Clear any previous QR code
            document.getElementById('qrCode').innerHTML = '';
            // Generate new QR code
            qr = new QRCode(document.getElementById("qrCode"), {
-               text: qrData,
+               text: fullUrl,
                width: 256,
                height: 256,
            });
@@ -110,7 +117,7 @@
            // Create a temporary link element to trigger download
            const link = document.createElement('a');
            link.href = image;
-           link.download = 'qr_code.png';
+           link.download = 'user_qr_code.png';
            // Programmatically trigger the download
            link.click();
        }
